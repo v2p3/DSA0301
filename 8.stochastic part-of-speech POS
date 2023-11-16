@@ -2,7 +2,7 @@ import nltk
 from nltk import FreqDist, ConditionalFreqDist
 from nltk.tokenize import word_tokenize
 
-# Training data (a small example)
+# Sample training data
 training_data = [
     ("The", "DT"),
     ("quick", "JJ"),
@@ -25,8 +25,9 @@ def train_pos_tagger(training_data):
     word_prob = {word: FreqDist(tags) for word, tags in bigram_freq.items()}
     for word in word_prob:
         total_count = word_freq[word]
-        for tag in word_prob[word]:
-            word_prob[word][tag] /= total_count
+        if total_count > 0:
+                for tag in word_prob[word]:
+                    word_prob[word][tag] /= total_count
 
     return word_prob
 
