@@ -1,30 +1,26 @@
 import nltk
 
-# Define a probabilistic context-free grammar (PCFG)
-pcfg = nltk.PCFG.fromstring("""
-    S -> NP VP [1.0]
-    NP -> Det N [0.5] | 'John' [0.5]
-    VP -> V NP [0.9] | VP PP [0.1]
-    Det -> 'the' [0.6] | 'a' [0.4]
-    N -> 'dog' [0.7] | 'ball' [0.3]
-    V -> 'chases' [0.5] | 'sees' [0.5]
-    PP -> P NP [1.0]
-    P -> 'with' [1.0]
+# Define a simple PCFG
+pcfg_grammar = nltk.PCFG.fromstring("""
+    S -> NP VP [0.7] | NP V [0.3]
+    NP -> Det N [0.4] | 'John' [0.3] | 'Mary' [0.3]
+    VP -> V NP [0.6] | 'likes' [0.4]
+    Det -> 'the' [0.8] | 'a' [0.2]
+    N -> 'dog' [0.5] | 'cat' [0.5]
+    V -> 'chases' [0.7] | 'likes' [0.3]
 """)
 
-# Create a PCFG parser
-parser = nltk.ViterbiParser(pcfg)
+# Create a probabilistic parser using the PCFG
+parser = nltk.ViterbiParser(pcfg_grammar)
 
-def parse_sentence(sentence):
-    words = sentence.split()
-    trees = list(parser.parse(words))
+# Input sentence
+sentence = "John likes the cat"
 
-    if not trees:
-        print(f"No parse tree found for the sentence: {sentence}")
-    else:
-        for tree in trees:
-            print("Parse Tree:")
-            tree.pretty_print()
+# Tokenize the sentence
+tokens = sentence.split()
 
-# Example usage
-parse_sentence("John chases the dog")
+# Parse the sentence
+for tree in parser.parse(tokens):
+    tree.pretty_print()
+    print("Probability:", tree.prob())
+
