@@ -1,4 +1,3 @@
-pip install nltk
 from nltk.stem import PorterStemmer
 
 def stem_words(words):
